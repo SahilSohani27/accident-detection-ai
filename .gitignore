@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+*.log
+*.sqlite3
+*.db
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+
+# FastAPI / backend
+backend/.mypy_cache/
+backend/.pytest_cache/
+backend/.coverage
+backend/htmlcov/
+backend/.ruff_cache/
+
+# Node / React (dashboard)
+dashboard/node_modules/
+dashboard/.next/
+dashboard/.turbo/
+dashboard/dist/
+dashboard/build/
+dashboard/.eslintcache
+
+# OS / IDE junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# Docker
+*.pid
+*.seed
+*.pid.lock
+
+# Logs
+*.log
+logs/
+backend/logs/
+
+# Cache
+.cache/
+*.egg-info/
