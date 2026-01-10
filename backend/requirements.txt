@@ -1,0 +1,12 @@
+qrcode[pil]
+opencv-python
+ultralytics
+fastapi
+uvicorn
+openai
+python-multipart
+uuid
+python-dotenv
+streamlit
+requests
+pillow
