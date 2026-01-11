@@ -1,29 +1,73 @@
-# 🚦 AI Accident Detection System
+# 🚦 ResQ-Vision
 
-An intelligent accident detection system powered by **YOLOv8s** and **OpenAI GPT** that analyzes CCTV/video footage to detect road accidents, reduce false positives, and automatically generate SOS alerts with evidence (video + image).  
+### AI-Powered Accident Detection and Emergency Response System
 
-This project is a backend-focused prototype, with a **Streamlit-based frontend** for demonstration, and supports integration with a **Telegram bot** for fast SOS notifications.
+ResQ-Vision is a backend-centric, real-time accident detection and emergency alerting system designed to operate on live traffic surveillance feeds. It leverages deep learning–based video analysis to autonomously detect road accidents, validate them temporally to reduce false positives, and immediately trigger SOS alerts with visual evidence.
+
+While the demo operates on uploaded video clips, the system is architected for continuous ingestion from live CCTV camera streams deployed across highways and urban road infrastructure.
 
 ---
 
-## 📌 Features
-- 🎥 **Accident Detection from Video Clips** using YOLOv8s.  
-- ✅ **False Positive Reduction** – accident confirmed only if detected in `N` consecutive frames.  
-- 🖼️ **Automatic Clip & Frame Capture** – saves a 10s accident clip + the most confident accident frame.  
-- 🧠 **SOS Message Generation** – uses OpenAI GPT with accident info + frame for descriptive emergency alerts.  
-- 📲 **Telegram Bot Integration** – sends SOS message + accident video instantly.  
-- 🌐 **Streamlit Frontend** – simple dashboard for uploading and testing video clips.  
+## 🧠 System Overview
+
+Modern road networks already deploy large-scale CCTV infrastructure, yet these feeds are largely used for passive monitoring or post-incident analysis. ResQ-Vision transforms this passive infrastructure into an active, intelligent first-responder system.
+
+The platform continuously analyzes video streams, detects accident events using a trained YOLOv8 model, validates incidents across multiple consecutive frames, extracts visual evidence, and dispatches emergency alerts automatically without human intervention.
+
+---
+
+## 🏗️ Architecture
+
+The system follows a clean separation of concerns between frontend presentation and backend orchestration.
+
+### Backend
+
+FastAPI-based service responsible for video ingestion, accident detection, evidence extraction, SOS generation, and alert dispatch.
+
+### Frontend
+
+ReactJS application styled with Tailwind CSS, providing an intuitive interface for uploading videos and visualizing detection results during demonstration and testing.
+
+### Alerting Layer
+
+Telegram Bot integration for instant delivery of SOS alerts along with accident video clips.
+
+---
+
+## ⚙️ Core Workflow
+
+1. Video feed is ingested through the backend API
+2. Each frame is processed using a YOLOv8 accident detection model
+3. Accident detection is confirmed only if it persists across a defined number of consecutive frames
+4. Upon confirmation, the system automatically extracts
+   a short contextual video clip
+   the most representative accident frame
+5. Structured accident metadata is generated
+6. An SOS alert is dispatched to emergency responders via Telegram
+7. Processed outputs are exposed via static endpoints for frontend consumption
 
 ---
 
 ## 🛠️ Tech Stack
-- [FastAPI](https://fastapi.tiangolo.com/) – REST API backend  
-- [YOLOv8 (Ultralytics)](https://docs.ultralytics.com/) – accident detection model  
-- [OpenCV](https://opencv.org/) – video processing  
-- [OpenAI API (gpt-4o-mini)](https://platform.openai.com/) – SOS alert message generation  
-- [Streamlit](https://streamlit.io/) – demo frontend  
-- [Telegram Bot API](https://core.telegram.org/bots/api) – real-time SOS alerts  
-- [Python-dotenv](https://pypi.org/project/python-dotenv/) – environment management  
+
+### Backend
+
+FastAPI
+Python
+YOLOv8 (Ultralytics)
+OpenCV
+Python-dotenv
+
+### Frontend
+
+ReactJS
+Vite
+Tailwind CSS
+TypeScript
+
+### Alerts and Messaging
+
+Telegram Bot API
 
 ---
 
@@ -31,115 +75,160 @@ This project is a backend-focused prototype, with a **Streamlit-based frontend**
 
 ```
 accident-detection-ai/
-│── backend/
-  │── main.py                    # FastAPI entrypoint
-  │── modelv2.py                 # AccidentDetector (YOLOv8 logic)
-  │── sos_generator.py           # OpenAI GPT SOS message generator
-  │── send_sos.py                # Sends SOS message along with a 10 ec accident clip
-│── uploads/                   # Uploaded video storage
-  │── post_accident_output/      # Accident clips & best frames
-│── requirements.txt           # Dependencies
-│── .env                       # API keys and secrets
+│
+├── backend/
+│   ├── main.py                  FastAPI entry point
+│   ├── modelv2.py               YOLOv8 accident detection logic
+│   ├── sos_generator.py         SOS message generation module
+│   ├── send_sos.py              Telegram notification handler
+│
+├── frontend/
+│   ├── src/                     React application source
+│   ├── public/                  Static frontend assets
+│   ├── tailwind.config.ts
+│   ├── vite.config.ts
+│
+├── model/
+│   └── best.pt                  Trained YOLOv8 accident detection model
+│
+├── uploads/                     Temporarily stored input videos
+├── post_accident_output/        Generated clips and best frames
+│
+├── requirements.txt
+├── package.json
+└── README.md
 ```
 
 ---
 
-## ⚙️ How It Works
+## 🚀 Backend Setup and Execution
 
-**Workflow:**
-1. **Video Input** → Upload CCTV footage or video clip
-2. **YOLOv8 Detection** → Analyze each frame for accidents
-3. **Frame Validation** → Confirm accident if detected in ≥4 consecutive frames
-4. **Evidence Capture** → Save 10-second clip + best accident frame
-5. **SOS Generation** → Create emergency message using OpenAI GPT
-6. **Alert System** → Send SOS + video via Telegram Bot
-7. **Demo Interface** → View results through Streamlit UI## ⚙️ How It Works
+### 1. Clone the Repository
 
----
-
-## 🚀 Setup & Installation
-
-### 1️⃣ Clone Repository
 ```bash
 git clone https://github.com/your-username/accident-detection-ai.git
 cd accident-detection-ai
 ```
 
-### 2️⃣ Create Virtual Environment
+### 2. Create and Activate Virtual Environment
+
 ```bash
 python -m venv venv
-source venv/bin/activate   # Mac/Linux
-venv\Scripts\activate      # Windows
+source venv/bin/activate        # Linux or macOS
+venv\Scripts\activate           # Windows
 ```
 
-### 3️⃣ Install Dependencies
+### 3. Install Backend Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4️⃣ Environment Variables
+### 4. Environment Configuration
 
-Create a `.env` file:
+Create a `.env` file in the root directory:
 
 ```env
-OPENAI_API_KEY=your_openai_api_key
 TELEGRAM_BOT_TOKEN=your_bot_token
 TELEGRAM_CHAT_ID=your_chat_id
 ```
 
-### 5️⃣ Run FastAPI Backend
+---
+
+### 5. Run FastAPI Server
+
 ```bash
-uvicorn main:app --reload
+uvicorn backend.main:app --reload
 ```
 
-API will be live at 👉 http://127.0.0.1:8000/docs
+Swagger UI will be available at
+[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
-### 6️⃣ Run Streamlit Frontend
+---
+
+## 🌐 Frontend Setup and Execution
+
+### 1. Navigate to Frontend Directory
+
 ```bash
-streamlit run app.py
+cd frontend
 ```
 
----
+### 2. Install Dependencies
 
-## 📡 API Endpoints
+```bash
+npm install
+```
 
-### `POST /upload-video/`
+### 3. Start Development Server
 
-Upload a video for accident detection.
+```bash
+npm run dev
+```
 
-**Request:**
-- File upload (.mp4, .avi, .mov, .mkv)
-- Max size: 50 MB
-
----
-
-## 📲 Telegram Bot Integration
-
-- Automatically sends the SOS message + 10s accident clip to a predefined Telegram group/channel.
-- Requires setting up `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` in `.env`.
+Frontend will run on
+[http://localhost:5173](http://localhost:5173)
 
 ---
 
-## 🎯 Future Improvements
+## 📡 API Reference
 
-- Direct CCTV integration instead of local video files.
-- Multi-camera accident detection & tracking.
+### POST `/upload-video/`
 
+Uploads a video file for accident detection.
+
+**Input**
+Supported formats mp4 avi mov mkv
+Maximum size 50 MB
+
+**Processing**
+Runs accident detection with temporal validation
+Extracts evidence upon detection
+Triggers SOS alert
+
+**Response**
+Accident metadata
+Clip and frame URLs
+SOS message status
+Telegram dispatch confirmation
+
+---
+
+## 🔔 Telegram Alerting
+
+When an accident is confirmed, the system automatically sends an SOS alert containing
+A concise emergency message
+The extracted accident video clip
+
+This ensures rapid situational awareness for emergency responders.
+
+---
+
+## 🌍 Real-World Deployment Vision
+
+Although the current implementation accepts uploaded videos for demonstration, ResQ-Vision is designed to operate on continuous live CCTV streams. The backend orchestration layer can be directly connected to traffic cameras deployed on highways, intersections, and smart city infrastructure to enable real-time accident detection and response at scale.
+
+---
+
+## 🔮 Future Enhancements
+
+Live RTSP and CCTV stream ingestion
+Multi-camera accident correlation
+Geo-tagged emergency alerts
+Integration with government emergency response systems
+Dashboard analytics for traffic authorities
 
 ---
 
 ## 👨‍💻 Contributors
 
-- **Sahil Sohani**
-- **Dushyant Atalkar**
-
+Sahil Sohani
+Dushyant Atalkar
 
 ---
 
 ## 📜 License
 
-This project is licensed under the MIT License.
+This project is licensed under the Apache 2.0 License.
 
-
-
-
+---
