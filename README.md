@@ -222,8 +222,8 @@ Dashboard analytics for traffic authorities
 
 ## 👨‍💻 Contributors
 
-Sahil Sohani
-Dushyant Atalkar
+- Sahil Sohani
+- Dushyant Atalkar
 
 ---
 
